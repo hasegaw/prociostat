@@ -27,7 +27,7 @@ axis(2) # draw Y axis
 
 # CPU time
 par(new = TRUE)
-plot(x=csv$time, y=csv$delta_utime, type="l", xlab='time[sec]', ylab='cpu%', ylim=cpurate_lim, col='orange', axes = FALSE)
+plot(x=csv$time, y=csv$delta_utime, type="l", xlab='time[epoch]', ylab='', ylim=cpurate_lim, col='orange', axes = FALSE)
 par(new = TRUE)
 plot(x=csv$time, y=csv$delta_stime, type="l", xlab='', ylab='', ylim=cpurate_lim, col='red', axes = FALSE)
 
