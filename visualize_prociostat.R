@@ -15,11 +15,16 @@ png(output_filename, width=800, height=600)
 iorate_lim = c(0, max(csv$delta_read_bytes, csv$delta_write_bytes) * 1.1);
 cpurate_lim = c(0, max(csv$delta_utime, csv$delta_stime) * 1.1);
 
+dates = as.POSIXct(csv$time, origin="1970-01-01")
+
+# surrpress draw of X axis 
+par(xaxt="n")
+
 par(oma = c(0, 0, 0, 2))
 par(pch=20)
-plot(x=csv$time, y=csv$delta_write_bytes, xlab="", ylab="KB/s", ylim=iorate_lim, col='pink', axes = FALSE);
+plot(x=dates, y=csv$delta_write_bytes, xlab="", ylab="KB/s", ylim=iorate_lim, col='pink', axes = FALSE);
 par(new = TRUE)
-plot(x=csv$time, y=csv$delta_read_bytes, xlab="", ylab="", ylim=iorate_lim, col='lightgreen', axes = FALSE);
+plot(x=dates, y=csv$delta_read_bytes, xlab="", ylab="", ylim=iorate_lim, col='lightgreen', axes = FALSE);
 mtext('cpu%', side=4, line=3)
 
 axis(1) # draw X axis
@@ -27,14 +32,19 @@ axis(2) # draw Y axis
 
 # CPU time
 par(new = TRUE)
-plot(x=csv$time, y=csv$delta_utime, type="l", xlab='time[epoch]', ylab='', ylim=cpurate_lim, col='orange', axes = FALSE)
+plot(x=dates, y=csv$delta_utime, type="l", xlab='time[epoch]', ylab='', ylim=cpurate_lim, col='orange', axes = FALSE)
 par(new = TRUE)
-plot(x=csv$time, y=csv$delta_stime, type="l", xlab='', ylab='', ylim=cpurate_lim, col='red', axes = FALSE)
+plot(x=dates, y=csv$delta_stime, type="l", xlab='', ylab='', ylim=cpurate_lim, col='red', axes = FALSE)
 
 # blocked ticks
 par(new = TRUE)
-plot(x=csv$time, y=csv$delta_delayacct_blkio_ticks, type="l", xlab='', ylab='', ylim=c(0,200), col='purple', axes = FALSE)
+plot(x=dates, y=csv$delta_delayacct_blkio_ticks, type="l", xlab='', ylab='', ylim=c(0,200), col='purple', axes = FALSE)
 axis(4)
+
+par(xaxt="s")
+
+axis.POSIXct(1, at=seq(min(dates), max(dates), by=60), format="%X")
+
 box()
 legend("topleft", legend=c("read", "write", "cpu%", "sys%", "blocked ticks"), col = c("lightgreen", "pink", "orange","red", "purple"), lty=c(1,1,1,1))
 dev.off()
