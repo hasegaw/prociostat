@@ -166,7 +166,7 @@ sub write_process_delta($$$) {
 			$current_processes->{$pid}
 		);
 
-		if (defined $options->{write_csv}) {
+		if (defined $options->{write_csv} && (defined $last_processes->{$pid})) {
 			my $header = ( ! -e 'process.'. $pid . '.txt' );
 			my @csv = ($time, $delta->{delta_utime}, $delta->{delta_stime}, $delta->{delta_delayacct_blkio_ticks},
 					 $delta->{delta_read_bytes}, $delta->{delta_write_bytes});
